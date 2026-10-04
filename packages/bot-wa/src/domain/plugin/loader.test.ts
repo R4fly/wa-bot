@@ -4,7 +4,7 @@ import { PluginError } from "../../kernel/errors/index.js";
 import { sha256Hex } from "../../security/hash.js";
 import { generateSigningKeypair, signPayload } from "../../security/sign.js";
 import { createTrustStore } from "../../security/trust-store.js";
-import type { AuditSink, Clock } from "../../types/internal.js";
+import type { AuditEntry, AuditSink, Clock } from "../../types/internal.js";
 import { createEventBus, type PluginLoadedEvent, type PluginRejectedEvent } from "../event/bus.js";
 import { loadPlugin, type SandboxOpenOptions } from "./loader.js";
 import { createPluginRegistry } from "./registry.js";
@@ -84,10 +84,14 @@ describe("loadPlugin", () => {
     const registry = createPluginRegistry();
     const bus = createEventBus();
     const loaded: PluginLoadedEvent[] = [];
-    bus.on("plugin:loaded", (event) => loaded.push(event));
-    const entries: Parameters<AuditSink["write"]>[0][] = [];
+    bus.on("plugin:loaded", (event) => {
+      loaded.push(event);
+    });
+    const entries: AuditEntry[] = [];
     const audit: AuditSink = {
-      write: (entry) => entries.push(entry),
+      write: (entry) => {
+        entries.push(entry);
+      },
     };
     const manifest = await loadPlugin(
       {
@@ -106,6 +110,7 @@ describe("loadPlugin", () => {
     expect(manifest.name).toBe("@scope/echo");
     expect(registry.list().length).toBe(1);
     expect(loaded.length).toBe(1);
+    expect(entries.some((entry) => entry.action === "plugin:loaded")).toBe(true);
   });
 
   it("should throw PluginError and emit plugin:rejected when the bundle is tampered", async () => {
@@ -113,7 +118,9 @@ describe("loadPlugin", () => {
     const registry = createPluginRegistry();
     const bus = createEventBus();
     const rejected: PluginRejectedEvent[] = [];
-    bus.on("plugin:rejected", (event) => rejected.push(event));
+    bus.on("plugin:rejected", (event) => {
+      rejected.push(event);
+    });
     const audit: AuditSink = { write: () => undefined };
     await expect(
       loadPlugin(
@@ -153,5 +160,35 @@ describe("loadPlugin", () => {
     await expect(loadPlugin(deps, fixture.manifest, fixture.bundle, "memory:plugin")).rejects.toBeInstanceOf(
       PluginError,
     );
+  });
+
+  it("should throw PluginError and keep the registry empty when plugin activation fails", async () => {
+    const fixture = await createFixture(["send:message"]);
+    const failing: PluginModule = {
+      activate: async () => {
+        throw new Error("boot failed");
+      },
+    };
+    const broken: Fixture = { ...fixture, plugin: failing };
+    const registry = createPluginRegistry();
+    const bus = createEventBus();
+    const audit: AuditSink = { write: () => undefined };
+    await expect(
+      loadPlugin(
+        {
+          trustStore: broken.trustStore,
+          currentVersion: "0.6.0",
+          registry,
+          openSandbox: createOpenSandbox(broken),
+          bus,
+          audit,
+          clock: createClock(),
+        },
+        broken.manifest,
+        broken.bundle,
+        "memory:plugin",
+      ),
+    ).rejects.toBeInstanceOf(PluginError);
+    expect(registry.list().length).toBe(0);
   });
 });

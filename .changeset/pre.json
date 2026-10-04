@@ -1,0 +1,26 @@
+{
+  "mode": "pre",
+  "tag": "next",
+  "initialVersions": {
+    "example-ai-chatbot": "0.0.0",
+    "example-echo-bot": "0.0.0",
+    "example-group-manager-bot": "0.0.0",
+    "example-multi-session-bot": "0.0.0",
+    "@baehaqirafly3/bot-wa": "0.1.0",
+    "@baehaqirafly3/bot-wa-cli": "0.1.0",
+    "@baehaqirafly3/bot-wa-testing": "0.1.0",
+    "@baehaqirafly3/create-bot-wa": "0.1.0",
+    "@baehaqirafly3/bot-wa-shared": "0.1.0"
+  },
+  "changesets": [
+    "domain-layer",
+    "final-four",
+    "four-phases",
+    "infra-audit-ratelimit-queue",
+    "plugin-sandbox-process",
+    "plugin-sandbox",
+    "plugin-verification",
+    "session-layer",
+    "wwebjs-adapter"
+  ]
+}

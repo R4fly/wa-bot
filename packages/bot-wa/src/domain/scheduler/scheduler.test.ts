@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { ConfigError } from "../../kernel/errors/index.js";
 import { createMemoryStorage } from "../../infra/storage/memory.js";
 import type { Clock } from "../../types/internal.js";
 import { cronMatches, parseCron } from "./cron.js";
@@ -117,5 +118,95 @@ describe("Scheduler", () => {
     expect(calls).toBe(2);
     expect(errors.length).toBe(1);
     scheduler.stop();
+  });
+
+  it("should fire an interval job repeatedly while the scheduler runs", async () => {
+    const clock = manualClock();
+    const storage = createMemoryStorage();
+    const runs: string[] = [];
+    const scheduler = createScheduler({ storage, clock, tickMs: 100, run: async (id) => { runs.push(id); } });
+    await scheduler.add({ id: "int1", kind: "interval", everyMs: 100 });
+    await scheduler.start();
+    for (let i = 0; i < 5; i += 1) {
+      clock.advance(100);
+      await flush();
+    }
+    expect(runs.length).toBeGreaterThanOrEqual(3);
+    scheduler.stop();
+  });
+
+  it("should not fire a cron job when the lock is held by another instance", async () => {
+    const clock = manualClock();
+    const storage = createMemoryStorage();
+    const runs: string[] = [];
+    const scheduler = createScheduler({ storage, clock, tickMs: 100, run: async (id) => { runs.push(id); } });
+    await scheduler.add({ id: "c1", kind: "cron", expr: "* * * * *", timeZone: "UTC" });
+    await storage.set("scheduler-lock", "c1", Date.now(), { ttlMs: 100_000 });
+    await scheduler.start();
+    clock.advance(100);
+    await flush();
+    expect(runs).toEqual([]);
+    scheduler.stop();
+  });
+
+  it("should remove an interval job when remove is called and stop firing it", async () => {
+    const clock = manualClock();
+    const storage = createMemoryStorage();
+    const runs: string[] = [];
+    const scheduler = createScheduler({ storage, clock, tickMs: 100, run: async (id) => { runs.push(id); } });
+    await scheduler.add({ id: "int2", kind: "interval", everyMs: 100 });
+    await scheduler.start();
+    clock.advance(100);
+    await flush();
+    expect(runs.length).toBe(1);
+    await scheduler.remove("int2");
+    clock.advance(200);
+    await flush();
+    expect(runs.length).toBe(1);
+    scheduler.stop();
+  });
+
+  it("should not start a second tick loop when start is called twice", async () => {
+    const clock = manualClock();
+    const storage = createMemoryStorage();
+    const runs: string[] = [];
+    const scheduler = createScheduler({ storage, clock, tickMs: 100, run: async (id) => { runs.push(id); } });
+    await scheduler.add({ id: "once", kind: "interval", everyMs: 100 });
+    await scheduler.start();
+    await scheduler.start();
+    clock.advance(100);
+    await flush();
+    expect(runs.length).toBe(1);
+    scheduler.stop();
+  });
+
+  it("should throw ConfigError when a cron job has an invalid expression", async () => {
+    const clock = manualClock();
+    const storage = createMemoryStorage();
+    const scheduler = createScheduler({ storage, clock, run: async () => undefined });
+    await expect(scheduler.add({ id: "bad", kind: "cron", expr: "* *" })).rejects.toBeInstanceOf(ConfigError);
+  });
+
+  it("should throw ConfigError when an interval job lacks a positive everyMs", async () => {
+    const clock = manualClock();
+    const storage = createMemoryStorage();
+    const scheduler = createScheduler({ storage, clock, run: async () => undefined });
+    await expect(scheduler.add({ id: "bad", kind: "interval" })).rejects.toBeInstanceOf(ConfigError);
+  });
+
+  it("should throw ConfigError when a delay job lacks atMs", async () => {
+    const clock = manualClock();
+    const storage = createMemoryStorage();
+    const scheduler = createScheduler({ storage, clock, run: async () => undefined });
+    await expect(scheduler.add({ id: "bad", kind: "delay" })).rejects.toBeInstanceOf(ConfigError);
+  });
+
+  it("should remove the persisted spec when remove is called", async () => {
+    const clock = manualClock();
+    const storage = createMemoryStorage();
+    const scheduler = createScheduler({ storage, clock, run: async () => undefined });
+    await scheduler.add({ id: "gone", kind: "delay", atMs: 10 });
+    expect(await scheduler.remove("gone")).toBe(true);
+    expect(await storage.get("scheduler", "gone")).toBeUndefined();
   });
 });

@@ -24,6 +24,12 @@ describe("resolveLocale", () => {
     expect(resolveLocale({ userLocale: "fr", groupLocale: "id", fallback: "en", supported })).toBe("id");
     expect(resolveLocale({ userLocale: "fr", groupLocale: "de", fallback: "en", supported })).toBe("en");
   });
+
+  it("should fall back when neither user nor group locale is supported", () => {
+    expect(
+      resolveLocale({ userLocale: "fr", groupLocale: "de", fallback: "en", supported: ["id", "en"] }),
+    ).toBe("en");
+  });
 });
 
 describe("selectPlural", () => {
@@ -32,5 +38,9 @@ describe("selectPlural", () => {
     expect(selectPlural(0, forms)).toBe("kosong");
     expect(selectPlural(1, forms)).toBe("satu");
     expect(selectPlural(7, forms)).toBe("banyak");
+  });
+
+  it("should return an empty string when no plural form matches", () => {
+    expect(selectPlural(5, {})).toBe("");
   });
 });

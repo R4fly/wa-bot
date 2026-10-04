@@ -1,13 +1,17 @@
 {
   "name": "@baehaqirafly3/create-bot-wa",
-  "version": "0.1.0",
+  "version": "0.2.0-next.0",
   "description": "Project generator for @baehaqirafly3/bot-wa with six offline templates.",
   "license": "MIT",
   "type": "module",
   "bin": {
     "create-bot-wa": "./dist/index.js"
   },
-  "files": ["dist", "README.md", "LICENSE"],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "sideEffects": false,
   "engines": {
     "node": ">=20"
@@ -19,7 +23,7 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@baehaqirafly3/bot-wa-cli": "0.1.0"
+    "@baehaqirafly3/bot-wa-cli": "0.2.0-next.0"
   },
   "publishConfig": {
     "access": "public",
