@@ -20,6 +20,7 @@
     "plugin-sandbox-process",
     "plugin-sandbox",
     "plugin-verification",
+    "readme-refresh",
     "session-layer",
     "wwebjs-adapter"
   ]

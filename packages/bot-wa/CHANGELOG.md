@@ -1,5 +1,11 @@
 # @baehaqirafly3/bot-wa
 
+## 0.2.0-next.1
+
+### Patch Changes
+
+- Rewrite every package README with full documentation for npm and GitHub readers.
+
 ## 0.2.0-next.0
 
 ### Minor Changes

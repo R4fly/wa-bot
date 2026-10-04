@@ -1,6 +1,6 @@
 {
   "name": "@baehaqirafly3/bot-wa",
-  "version": "0.2.0-next.0",
+  "version": "0.2.0-next.1",
   "description": "Headless TypeScript library for building WhatsApp bots over the Baileys and whatsapp-web.js engines.",
   "license": "MIT",
   "type": "module",

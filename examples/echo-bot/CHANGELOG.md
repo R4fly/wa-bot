@@ -1,5 +1,12 @@
 # example-echo-bot
 
+## 0.0.1-next.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @baehaqirafly3/bot-wa@0.2.0-next.1
+
 ## 0.0.1-next.0
 
 ### Patch Changes

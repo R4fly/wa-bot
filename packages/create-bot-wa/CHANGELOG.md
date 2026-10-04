@@ -1,5 +1,13 @@
 # @baehaqirafly3/create-bot-wa
 
+## 0.2.0-next.1
+
+### Patch Changes
+
+- Rewrite every package README with full documentation for npm and GitHub readers.
+- Updated dependencies
+  - @baehaqirafly3/bot-wa-cli@0.2.0-next.1
+
 ## 0.2.0-next.0
 
 ### Minor Changes
