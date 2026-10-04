@@ -64,4 +64,32 @@ export type {
   NormalizedMessageEvent,
 } from "./adapters/contract.js";
 
+export { createEventBus, TypedEventBus } from "./domain/event/bus.js";
+export type { DomainEventName, DomainEvents, EventBusOptions, ListenerOptions } from "./domain/event/bus.js";
+
+export { createContext } from "./domain/context/builder.js";
+export type { ContextDeps } from "./domain/context/builder.js";
+export type { MessageContext, ReplySender } from "./domain/context/types.js";
+
+export { PERMISSION_LEVELS } from "./domain/command/metadata.js";
+export type { CommandMetadata, CommandScope, PermissionLevel } from "./domain/command/metadata.js";
+
+export { parseArgs } from "./domain/command/parser.js";
+export type { ParsedArgs } from "./domain/command/parser.js";
+
+export { matchCommand } from "./domain/command/matcher.js";
+export type { MatchResult } from "./domain/command/matcher.js";
+
+export { CommandRegistry, createCommandRegistry } from "./domain/command/registry.js";
+export type { CommandHandler, RegisteredCommand } from "./domain/command/registry.js";
+
+export { CooldownStore, createCooldownStore } from "./domain/command/cooldown.js";
+export type { CooldownDecision } from "./domain/command/cooldown.js";
+
+export { generateHelp } from "./domain/command/help.js";
+
+export { runPipeline } from "./domain/middleware/pipeline.js";
+export type { PipelineOptions } from "./domain/middleware/pipeline.js";
+export type { Middleware, NextFn } from "./domain/middleware/types.js";
+
 export type { AuditEntry, AuditSink, Clock } from "./types/internal.js";
