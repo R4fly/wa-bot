@@ -32,6 +32,6 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@baehaqirafly3/bot-wa-cli": "workspace:*"
+    "@baehaqirafly3/bot-wa-cli": "1.0.0-next.2"
   }
 }

@@ -29,6 +29,6 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@baehaqirafly3/bot-wa": "workspace:*"
+    "@baehaqirafly3/bot-wa": "1.0.0-next.2"
   }
 }
