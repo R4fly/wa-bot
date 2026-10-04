@@ -24,13 +24,21 @@ describe("baileys mapper", () => {
     expect(mapMessagesUpsert(null, "s1")).toEqual([]);
   });
 
-  it("should map qr updates to auth pending events", () => {
+  it("should map a qr field to an auth pending event", () => {
     const event = mapConnectionUpdate({ qr: "QRDATA" }, "s1");
     expect(event).toEqual({ kind: "auth", sessionId: "s1", status: "pending", qr: "QRDATA" });
   });
 
-  it("should map close updates to disconnected events", () => {
-    const event = mapConnectionUpdate({ connection: "close" }, "s1");
-    expect(event).toEqual({ kind: "connection", sessionId: "s1", status: "disconnected" });
+  it("should map open and close to connection events", () => {
+    expect(mapConnectionUpdate({ connection: "open" }, "s1")).toEqual({
+      kind: "connection",
+      sessionId: "s1",
+      status: "connected",
+    });
+    expect(mapConnectionUpdate({ connection: "close" }, "s1")).toEqual({
+      kind: "connection",
+      sessionId: "s1",
+      status: "disconnected",
+    });
   });
 });

@@ -53,8 +53,9 @@ export type ConnectionStatus = "connected" | "disconnected" | "connecting";
 
 /**
  * The engine adapter contract. Five groups: lifecycle, send, group, media,
- * contact and profile, plus events and auth. Adapters contain zero business
- * logic and must pass the identical contract test suite.
+ * contact and profile, plus events and auth. QR and pairing code methods are
+ * optional because not every engine exposes them. Adapters contain zero
+ * business logic and must pass the identical contract test suite.
  */
 export interface EngineAdapter {
   readonly name: EngineName;
@@ -80,4 +81,7 @@ export interface EngineAdapter {
 
   getAuthState(): Promise<unknown>;
   setAuthState(state: unknown): Promise<void>;
+
+  requestQR?(): Promise<string>;
+  requestPairingCode?(phone: string): Promise<string>;
 }

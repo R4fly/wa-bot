@@ -62,7 +62,10 @@ export function mapMessagesUpsert(payload: unknown, sessionId: string): readonly
   return out;
 }
 
-/** Normalizes a Baileys connection.update payload into a domain event. */
+/**
+ * Normalizes a Baileys connection.update payload. A qr field produces an auth
+ * pending event, otherwise the connection status is mapped.
+ */
 export function mapConnectionUpdate(
   payload: unknown,
   sessionId: string,
@@ -71,11 +74,8 @@ export function mapConnectionUpdate(
   if (root === undefined) {
     return null;
   }
-  if (typeof root["qr"] === "string") {
+  if (typeof root["qr"] === "string" && root["qr"].length > 0) {
     return { kind: "auth", sessionId, status: "pending", qr: root["qr"] };
-  }
-  if (typeof root["pairingCode"] === "string") {
-    return { kind: "auth", sessionId, status: "pending", pairingCode: root["pairingCode"] };
   }
   const connection = root["connection"];
   if (connection === "open") {
