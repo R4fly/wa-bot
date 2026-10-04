@@ -12,7 +12,8 @@ jobs:
   quality:
     runs-on: ubuntu-latest
     steps:
-      # Ganti tag action dengan commit SHA sebelum job publish diaktifkan (PRODUCTION bagian 4.4).
+      # TODO rilis: ganti tag action di bawah dengan commit SHA sesuai PRODUCTION 4.4
+      # sebelum job publish diaktifkan. Prosedur pin ada di pesan commit fase 17.
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
@@ -24,6 +25,13 @@ jobs:
       - run: npm run test --workspaces --if-present
       - run: npm run build --workspaces --if-present
       - run: npm audit --audit-level=high
+      - name: Generate SBOM
+        run: npx --yes @cyclonedx/cyclonedx-npm --output-file sbom.cdx.json --output-format JSON
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: sbom.cdx.json
 
   publish:
     if: github.ref == 'refs/heads/main'
@@ -33,6 +41,7 @@ jobs:
       contents: write
       id-token: write
     steps:
+      # TODO rilis: pin ke commit SHA sebelum diaktifkan
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
