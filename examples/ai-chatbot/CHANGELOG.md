@@ -1,5 +1,12 @@
 # example-ai-chatbot
 
+## 1.0.0-next.3
+
+### Patch Changes
+
+- Updated dependencies
+  - @baehaqirafly3/bot-wa@1.0.0-next.3
+
 ## 1.0.0-next.2
 
 ### Major Changes

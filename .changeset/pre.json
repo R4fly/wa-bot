@@ -16,6 +16,7 @@
     "bold-lions-serve",
     "domain-layer",
     "final-four",
+    "fix-workspace-deps",
     "four-phases",
     "infra-audit-ratelimit-queue",
     "plugin-sandbox-process",

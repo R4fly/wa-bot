@@ -1,5 +1,13 @@
 # @baehaqirafly3/bot-wa-testing
 
+## 1.0.0-next.3
+
+### Patch Changes
+
+- Fix workspace:* dependencies not being replaced with concrete versions during publish.
+- Updated dependencies
+  - @baehaqirafly3/bot-wa@1.0.0-next.3
+
 ## 1.0.0-next.2
 
 ### Major Changes
