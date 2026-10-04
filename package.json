@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "examples/*"
   ],
   "engines": {
     "node": ">=20"
@@ -14,13 +15,16 @@
     "build": "npm run build --workspaces --if-present",
     "dev": "npm run dev --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
+    "test:coverage": "npm run test:coverage --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
-    "audit": "npm audit --audit-level=high --omit=dev"
+    "audit": "npm audit --audit-level=high --omit=dev",
+    "bench:boot": "node --input-type=module -e \"const t0 = Date.now(); await import('./packages/bot-wa/dist/index.js'); console.log('boot ms', Date.now() - t0);\""
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.8",
     "@types/node": "^22.7.4",
+    "@vitest/coverage-v8": "^2.1.1",
     "eslint": "^9.10.0",
     "eslint-plugin-import": "^2.30.0",
     "prettier": "^3.3.3",

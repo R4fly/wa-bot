@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "@baehaqirafly3/bot-wa": ["../../packages/bot-wa/src/index.ts"],
+      "@baehaqirafly3/bot-wa-shared": ["../../packages/shared/src/index.ts"]
+    }
+  },
+  "include": ["src"]
+}
