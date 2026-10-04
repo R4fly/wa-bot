@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>@baehaqirafly3/bot-wa | TypeScript WhatsApp Bot Library</title>
+  <meta name="description" content="TypeScript library for building WhatsApp bots with one API over the Baileys and whatsapp-web.js engines. Typed commands, middleware, a signed plugin sandbox, multi session management, audit logs, and secret redaction.">
+  <link rel="canonical" href="https://baehaqirafly3.github.io/bot-wa/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="@baehaqirafly3/bot-wa">
+  <meta property="og:title" content="@baehaqirafly3/bot-wa | TypeScript WhatsApp Bot Library">
+  <meta property="og:description" content="One API over the Baileys and whatsapp-web.js engines. Typed commands, middleware, a signed plugin sandbox, multi session management, audit logs, and secret redaction.">
+  <meta property="og:url" content="https://baehaqirafly3.github.io/bot-wa/">
+  <meta name="twitter:card" content="summary">
+  <meta name="theme-color" content="#FAFAF9">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preload" href="assets/fonts/inter-variable-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "name": "@baehaqirafly3/bot-wa",
+  "description": "TypeScript library for building WhatsApp bots with one API over the Baileys and whatsapp-web.js engines.",
+  "programmingLanguage": "TypeScript",
+  "license": "https://spdx.org/licenses/MIT.html",
+  "codeRepository": "https://github.com/baehaqirafly3/bot-wa",
+  "operatingSystem": "Windows, Linux, macOS",
+  "runtimePlatform": "Node.js 20 or newer"
+}
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <div class="header-wrap">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="#statement">
+          <span class="brand-mark" aria-hidden="true">WA</span>
+          <span class="brand-name">bot-wa</span>
+          <span class="brand-scope">@baehaqirafly3</span>
+        </a>
+        <nav class="main-nav" aria-label="Primary">
+          <a href="#features">Features</a>
+          <a href="#engines">Engines</a>
+          <a href="#code">Code</a>
+          <a href="#plugin-model">Plugins</a>
+          <a href="#security">Security</a>
+          <a href="#compatibility">Compatibility</a>
+          <a href="https://github.com/baehaqirafly3/bot-wa" rel="noopener">GitHub</a>
+        </nav>
+        <div class="header-actions">
+          <a class="btn btn-secondary btn-header" href="#install">Install</a>
+          <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu">Menu</button>
+        </div>
+      </div>
+    </header>
+    <nav class="mobile-menu" id="mobile-menu" aria-label="Mobile" hidden>
+      <div class="container">
+        <a href="#features">Features</a>
+        <a href="#engines">Engines</a>
+        <a href="#code">Code</a>
+        <a href="#plugin-model">Plugins</a>
+        <a href="#security">Security</a>
+        <a href="#compatibility">Compatibility</a>
+        <a href="https://github.com/baehaqirafly3/bot-wa" rel="noopener">GitHub</a>
+        <a class="btn btn-secondary" href="#install">Install</a>
+      </div>
+    </nav>
+  </div>
+
+  <main id="main-content">
+    <section class="section section-statement" id="statement" aria-labelledby="statement-title">
+      <div class="container">
+        <p class="section-label">NPM package for Node.js</p>
+        <h1 id="statement-title">Build WhatsApp bots in TypeScript with one API over Baileys and whatsapp-web.js.</h1>
+        <p class="lead">Typed commands and middleware, a signed plugin sandbox, multi session management, audit logs, and secret redaction. Headless library, CLI, and starter templates.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#install">Install</a>
+          <a class="btn btn-secondary" href="https://github.com/baehaqirafly3/bot-wa" rel="noopener">View on GitHub</a>
+        </div>
+        <p class="caption">MIT license. Node.js 20 or newer. ESM and CommonJS.</p>
+      </div>
+    </section>
+
+    <section class="section" id="install" aria-labelledby="install-title">
+      <div class="container">
+        <p class="section-label">Section 03: Install</p>
+        <h2 id="install-title">Install</h2>
+        <p class="section-intro">Add the core package to a Node.js project.</p>
+        <div class="install-field">
+          <code id="cmd-core"><span class="prompt">$ </span>npm i @baehaqirafly3/bot-wa</code>
+          <button class="btn btn-copy-primary" type="button" data-copy-target="#cmd-core" aria-live="polite">Copy</button>
+        </div>
+        <div class="install-grid">
+          <div class="install-row">
+            <span class="install-label">CLI:</span>
+            <div class="install-field">
+              <code id="cmd-cli">npm i -g @baehaqirafly3/bot-wa-cli</code>
+              <button class="btn btn-copy" type="button" data-copy-target="#cmd-cli" aria-live="polite">Copy</button>
+            </div>
+          </div>
+          <div class="install-row">
+            <span class="install-label">New project:</span>
+            <div class="install-field">
+              <code id="cmd-create">npm create @baehaqirafly3/bot-wa@latest</code>
+              <button class="btn btn-copy" type="button" data-copy-target="#cmd-create" aria-live="polite">Copy</button>
+            </div>
+          </div>
+          <div class="install-row">
+            <span class="install-label">Testing:</span>
+            <div class="install-field">
+              <code id="cmd-test">npm i -D @baehaqirafly3/bot-wa-testing</code>
+              <button class="btn btn-copy" type="button" data-copy-target="#cmd-test" aria-live="polite">Copy</button>
+            </div>
+          </div>
+        </div>
+        <p class="caption">The package is in active development. Pin exact versions until 1.0.</p>
+      </div>
+    </section>
+
+    <section class="section" id="features" aria-labelledby="features-title">
+      <div class="container">
+        <p class="section-label">Section 04: Feature grid</p>
+        <h2 id="features-title">What is in the box</h2>
+        <p class="section-intro">Six parts that every serious WhatsApp bot ends up needing.</p>
+        <div class="feature-grid">
+          <article class="card">
+            <p class="card-eyebrow">Adapters</p>
+            <h3>One API, two engines</h3>
+            <p>Write commands once. Switch between Baileys and whatsapp-web.js with a config value. Each engine sits behind the same adapter contract and the same contract tests.</p>
+          </article>
+          <article class="card">
+            <p class="card-eyebrow">Domain</p>
+            <h3>Typed commands and middleware</h3>
+            <p>Aliases, namespaces, flags, cooldowns, and permission levels from guest to owner. Middleware runs in deterministic priority order, and the context is typed end to end.</p>
+          </article>
+          <article class="card">
+            <p class="card-eyebrow">Plugins</p>
+            <h3>Signed plugin sandbox</h3>
+            <p>Plugins declare permissions in a manifest. The loader checks the SHA-256 hash, the Ed25519 signature, and the publisher trust store before any code runs.</p>
+          </article>
+          <article class="card">
+            <p class="card-eyebrow">Sessions</p>
+            <h3>Multi session management</h3>
+            <p>Run several sessions in one process. Auth state in file, SQLite, or Redis. Backup, restore, and migrate sessions. Reconnect uses exponential backoff with jitter.</p>
+          </article>
+          <article class="card">
+            <p class="card-eyebrow">Security</p>
+            <h3>Audit log and secret redaction</h3>
+            <p>Both are on by default. Tokens, keys, and credentials are redacted before they reach any log sink. Sensitive actions are written to an audit trail.</p>
+          </article>
+          <article class="card">
+            <p class="card-eyebrow">Tooling</p>
+            <h3>CLI and starter templates</h3>
+            <p>A bot-wa CLI for sessions, plugins, config checks, and migrations. A generator with six templates, from a one file echo bot to a multi session setup.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="engines" aria-labelledby="engines-title">
+      <div class="container">
+        <p class="section-label">Section 05: Engine support</p>
+        <h2 id="engines-title">Engine support</h2>
+        <p class="section-intro">Two engines in v1, behind one adapter contract. Both are unofficial WhatsApp clients.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Engine</th>
+                <th scope="col">Adapter status</th>
+                <th scope="col">Planned in</th>
+                <th scope="col">How it connects</th>
+                <th scope="col">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Baileys</td>
+                <td><span class="badge badge-warning">In development</span></td>
+                <td>v0.2.0</td>
+                <td>WebSocket, no browser</td>
+                <td>First adapter. Reference implementation for the contract.</td>
+              </tr>
+              <tr>
+                <td>whatsapp-web.js</td>
+                <td><span class="badge badge-muted">Planned</span></td>
+                <td>v0.4.0</td>
+                <td>Browser automation with Puppeteer</td>
+                <td>Loaded lazily, only when selected. Heavier on memory.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="callout">Both engines are unofficial. WhatsApp can restrict or ban accounts that use unofficial clients. Use a dedicated number for your bot.</p>
+      </div>
+    </section>
+
+    <section class="section" id="code" aria-labelledby="code-title">
+      <div class="container">
+        <p class="section-label">Section 06: Code sample</p>
+        <h2 id="code-title">A bot in a few lines</h2>
+        <p class="section-intro">Illustrative example. API names are final from v0.3.0.</p>
+        <div class="code-layout">
+          <ol class="code-steps">
+            <li>Create a bot and choose the engine in config.</li>
+            <li>Register a command with metadata. Help text is generated from it.</li>
+            <li>Call start. Nothing connects before this call.</li>
+          </ol>
+          <div class="code-card">
+            <div class="code-head">
+              <span class="code-file">src/index.ts</span>
+              <button class="btn btn-copy" type="button" data-copy-target="#code-sample" aria-live="polite">Copy</button>
+            </div>
+            <pre class="code-block"><code id="code-sample"><span class="tok-kw">import</span> { createBot } <span class="tok-kw">from</span> <span class="tok-str">"@baehaqirafly3/bot-wa"</span>;
+
+<span class="tok-kw">const</span> bot = createBot({
+  <span class="tok-prop">engine</span>: { <span class="tok-prop">name</span>: <span class="tok-str">"baileys"</span> },
+  <span class="tok-prop">session</span>: { <span class="tok-prop">name</span>: <span class="tok-str">"main"</span>, <span class="tok-prop">storage</span>: <span class="tok-str">"sqlite"</span> },
+});
+
+bot.command(<span class="tok-str">"ping"</span>, { <span class="tok-prop">description</span>: <span class="tok-str">"Check that the bot responds"</span> }, <span class="tok-kw">async</span> (ctx) =&gt; {
+  <span class="tok-kw">await</span> ctx.reply(<span class="tok-str">"pong"</span>);
+});
+
+<span class="tok-kw">await</span> bot.start();</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="plugin-model" aria-labelledby="plugin-title">
+      <div class="container">
+        <p class="section-label">Section 07: Plugin model</p>
+        <h2 id="plugin-title">How a plugin is verified</h2>
+        <p class="section-intro">A plugin runs only if every check passes. A failed check is written to the audit log.</p>
+        <div class="diagram-wrap">
+          <svg class="diagram" viewBox="0 0 1120 240" role="img" aria-labelledby="dg-title dg-desc">
+            <title id="dg-title">Plugin verification flow</title>
+            <desc id="dg-desc">Five sequential checks: read plugin.json, hash the bundle with SHA-256 and compare with the manifest, verify the Ed25519 signature, confirm the publisher is in the trust store and not revoked, and confirm the engine version range matches. Any failed check routes to rejection with an audit entry, a plugin:rejected event, and a PluginError. Passing checks load the plugin into an isolated sandbox worker where only permitted APIs are injected, then the plugin runs.</desc>
+            <g>
+              <rect class="dg-box" x="4" y="24" width="150" height="56"></rect>
+              <text class="dg-text" x="79" y="46" text-anchor="middle">Read</text>
+              <text class="dg-text" x="79" y="62" text-anchor="middle">plugin.json</text>
+              <line class="dg-line" x1="154" y1="52" x2="168" y2="52"></line>
+              <polygon class="dg-arrow" points="174,52 166,48 166,56"></polygon>
+              <rect class="dg-box" x="174" y="24" width="150" height="56"></rect>
+              <text class="dg-text" x="249" y="46" text-anchor="middle">Hash bundle</text>
+              <text class="dg-text" x="249" y="62" text-anchor="middle">SHA-256 vs manifest</text>
+              <line class="dg-line" x1="324" y1="52" x2="338" y2="52"></line>
+              <polygon class="dg-arrow" points="344,52 336,48 336,56"></polygon>
+              <rect class="dg-box" x="344" y="24" width="150" height="56"></rect>
+              <text class="dg-text" x="419" y="46" text-anchor="middle">Verify Ed25519</text>
+              <text class="dg-text" x="419" y="62" text-anchor="middle">signature</text>
+              <line class="dg-line" x1="494" y1="52" x2="508" y2="52"></line>
+              <polygon class="dg-arrow" points="514,52 506,48 506,56"></polygon>
+              <rect class="dg-box" x="514" y="24" width="150" height="56"></rect>
+              <text class="dg-text" x="589" y="46" text-anchor="middle">Publisher trusted</text>
+              <text class="dg-text" x="589" y="62" text-anchor="middle">not revoked</text>
+              <line class="dg-line" x1="664" y1="52" x2="678" y2="52"></line>
+              <polygon class="dg-arrow" points="684,52 676,48 676,56"></polygon>
+              <rect class="dg-box" x="684" y="24" width="150" height="56"></rect>
+              <text class="dg-text" x="759" y="46" text-anchor="middle">Engine range</text>
+              <text class="dg-text" x="759" y="62" text-anchor="middle">matches</text>
+              <line class="dg-line" x1="834" y1="52" x2="848" y2="52"></line>
+              <polygon class="dg-arrow" points="854,52 846,48 846,56"></polygon>
+            </g>
+            <g>
+              <line class="dg-line dg-fail" x1="249" y1="80" x2="249" y2="164"></line>
+              <line class="dg-line dg-fail" x1="419" y1="80" x2="419" y2="164"></line>
+              <line class="dg-line dg-fail" x1="589" y1="80" x2="589" y2="164"></line>
+              <line class="dg-line dg-fail" x1="759" y1="80" x2="759" y2="164"></line>
+              <line class="dg-line dg-fail" x1="249" y1="164" x2="759" y2="164"></line>
+              <line class="dg-line dg-fail" x1="354" y1="164" x2="354" y2="176"></line>
+              <text class="dg-text dg-fail-text" x="257" y="124">fail</text>
+              <text class="dg-text dg-fail-text" x="427" y="124">fail</text>
+              <text class="dg-text dg-fail-text" x="597" y="124">fail</text>
+              <text class="dg-text dg-fail-text" x="767" y="124">fail</text>
+              <rect class="dg-box dg-box-danger" x="4" y="176" width="700" height="44"></rect>
+              <text class="dg-text dg-fail-text" x="354" y="202" text-anchor="middle">Reject. Write audit entry, emit plugin:rejected, throw PluginError</text>
+            </g>
+            <g>
+              <rect class="dg-group" x="854" y="24" width="262" height="124"></rect>
+              <text class="dg-label" x="866" y="16">SANDBOX</text>
+              <rect class="dg-box" x="866" y="40" width="238" height="44"></rect>
+              <text class="dg-text" x="985" y="58" text-anchor="middle">Load into isolated</text>
+              <text class="dg-text" x="985" y="74" text-anchor="middle">sandbox worker</text>
+              <rect class="dg-box" x="866" y="96" width="238" height="40"></rect>
+              <text class="dg-text" x="985" y="120" text-anchor="middle">Inject only permitted APIs</text>
+              <line class="dg-line" x1="985" y1="148" x2="985" y2="170"></line>
+              <polygon class="dg-arrow" points="985,176 981,168 989,168"></polygon>
+              <rect class="dg-box dg-box-success" x="866" y="176" width="238" height="44"></rect>
+              <text class="dg-text dg-ok-text" x="985" y="202" text-anchor="middle">Plugin running</text>
+            </g>
+          </svg>
+        </div>
+        <h3>Permissions</h3>
+        <div class="chip-grid">
+          <span class="chip">read:message</span>
+          <span class="chip">send:message</span>
+          <span class="chip">access:storage</span>
+          <span class="chip">access:network</span>
+          <span class="chip">access:fs</span>
+          <span class="chip">access:scheduler</span>
+          <span class="chip">access:session</span>
+          <span class="chip">admin:group</span>
+        </div>
+        <p class="caption">A permission that is not declared is not granted.</p>
+      </div>
+    </section>
+
+    <section class="section" id="security" aria-labelledby="security-title">
+      <div class="container">
+        <p class="section-label">Section 08: Security</p>
+        <h2 id="security-title">Security defaults</h2>
+        <p class="section-intro">What the library does, stated plainly.</p>
+        <div class="security-grid">
+          <div class="security-item">
+            <h3>Redaction before logging</h3>
+            <p>Fields like token, apiKey, password, and authorization, and patterns like JWT and Bearer tokens, are redacted before any sink receives the data.</p>
+          </div>
+          <div class="security-item">
+            <h3>Audit trail</h3>
+            <p>Session changes, plugin installs and rejections, config changes, sensitive commands, rate limit hits, and sandbox violations are recorded with a correlation ID.</p>
+          </div>
+          <div class="security-item">
+            <h3>Verified plugins</h3>
+            <p>Hash, signature, publisher trust, and engine range are checked before load. Permissions are granular and deny by default.</p>
+          </div>
+          <div class="security-item">
+            <h3>Isolated execution</h3>
+            <p>Plugins run with a handler timeout and a memory limit. A plugin crash does not stop the bot.</p>
+          </div>
+          <div class="security-item">
+            <h3>Cryptographic randomness</h3>
+            <p>Random values use crypto.randomBytes and crypto.randomUUID. The core avoids eval and new Function.</p>
+          </div>
+          <div class="security-item">
+            <h3>Supply chain checks</h3>
+            <p>npm audit runs in CI. Each release ships a CycloneDX SBOM and npm provenance.</p>
+          </div>
+          <div class="security-item">
+            <h3>No telemetry</h3>
+            <p>The library, the CLI, and the project generator send no usage data.</p>
+          </div>
+        </div>
+        <p class="security-links"><a href="#security">Read the security policy</a></p>
+        <p class="caption">No software is perfectly secure. Report vulnerabilities through the repository security advisories.</p>
+      </div>
+    </section>
+
+    <section class="section" id="compatibility" aria-labelledby="compat-title">
+      <div class="container">
+        <p class="section-label">Section 09: Compatibility</p>
+        <h2 id="compat-title">Compatibility</h2>
+        <p class="section-intro">What to expect on your machine.</p>
+        <div class="table-wrap">
+          <table>
+            <tbody>
+              <tr>
+                <th scope="row">Runtime</th>
+                <td>Node.js 20 or newer (LTS)</td>
+              </tr>
+              <tr>
+                <th scope="row">Module formats</th>
+                <td>ESM and CommonJS with an exports map</td>
+              </tr>
+              <tr>
+                <th scope="row">Language</th>
+                <td>TypeScript strict, type declarations included</td>
+              </tr>
+              <tr>
+                <th scope="row">Operating systems</th>
+                <td>Windows, Linux, macOS</td>
+              </tr>
+              <tr>
+                <th scope="row">Package manager</th>
+                <td>npm with workspaces</td>
+              </tr>
+              <tr>
+                <th scope="row">Engines</th>
+                <td>Baileys, whatsapp-web.js</td>
+              </tr>
+              <tr>
+                <th scope="row">Storage</th>
+                <td>Memory, file, SQLite, Redis</td>
+              </tr>
+              <tr>
+                <th scope="row">License</th>
+                <td>MIT</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="caption">Bun and Deno are not supported in v1.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <p class="footer-brand">bot-wa</p>
+          <p class="footer-tag">TypeScript library for WhatsApp bots.</p>
+        </div>
+        <nav aria-label="Project">
+          <p class="footer-head">Project</p>
+          <a href="https://github.com/baehaqirafly3/bot-wa">GitHub</a>
+          <a href="https://www.npmjs.com/package/@baehaqirafly3/bot-wa">npm</a>
+          <a href="https://github.com/baehaqirafly3/bot-wa/releases">Changelog</a>
+          <a href="https://github.com/baehaqirafly3/bot-wa/releases">Releases</a>
+        </nav>
+        <nav aria-label="Packages">
+          <p class="footer-head">Packages</p>
+          <a href="https://www.npmjs.com/package/@baehaqirafly3/bot-wa">bot-wa</a>
+          <a href="https://www.npmjs.com/package/@baehaqirafly3/bot-wa-cli">bot-wa-cli</a>
+          <a href="https://www.npmjs.com/package/@baehaqirafly3/create-bot-wa">create-bot-wa</a>
+          <a href="https://www.npmjs.com/package/@baehaqirafly3/bot-wa-testing">bot-wa-testing</a>
+        </nav>
+        <nav aria-label="Legal">
+          <p class="footer-head">Legal</p>
+          <a href="https://github.com/baehaqirafly3/bot-wa/blob/main/LICENSE">MIT license</a>
+          <a href="#security">Security policy</a>
+          <a href="https://github.com/baehaqirafly3/bot-wa/issues">Contact</a>
+        </nav>
+      </div>
+      <p class="footer-legal">MIT License. Not affiliated with WhatsApp or Meta. WhatsApp is a trademark of its owner.</p>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

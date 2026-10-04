@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://baehaqirafly3.github.io/bot-wa/sitemap.xml

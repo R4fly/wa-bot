@@ -1,0 +1,11 @@
+.env
+.env.*
+!.env.example
+sessions/
+*.session.json
+*.pem
+trust-store.json
+dist/
+coverage/
+.turbo/
+node_modules/
