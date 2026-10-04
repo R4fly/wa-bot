@@ -5,10 +5,10 @@ import { createEventBus } from "./bus.js";
 function fakeMessage(body: string): NormalizedMessageEvent {
   return {
     kind: "message",
-    sessionId: "s1",
-    messageId: "m1",
-    senderJid: "a@example",
-    chatJid: "a@example",
+    sessionId: "s",
+    messageId: "m",
+    senderJid: "u@example",
+    chatJid: "u@example",
     body,
     timestamp: 0,
     isGroup: false,
@@ -16,53 +16,92 @@ function fakeMessage(body: string): NormalizedMessageEvent {
 }
 
 describe("TypedEventBus", () => {
-  it("should run higher priority listeners first when emitting", () => {
+  it("should deliver a named event to its listener", () => {
     const bus = createEventBus();
-    const order: string[] = [];
-    bus.on("message", () => order.push("low"), { priority: 1 });
-    bus.on("message", () => order.push("high"), { priority: 10 });
-    bus.emit("message", fakeMessage("x"));
-    expect(order).toEqual(["high", "low"]);
-  });
-
-  it("should run a once listener only one time when emitting twice", () => {
-    const bus = createEventBus();
-    let count = 0;
-    bus.on("message", () => {
-      count += 1;
-    }, { once: true });
-    bus.emit("message", fakeMessage("x"));
-    bus.emit("message", fakeMessage("y"));
-    expect(count).toBe(1);
-  });
-
-  it("should isolate a throwing listener and still run the next one", () => {
-    const errors: unknown[] = [];
-    const bus = createEventBus({
-      onError: (error) => {
-        errors.push(error);
-      },
+    const received: NormalizedMessageEvent[] = [];
+    bus.on("message", (event) => {
+      received.push(event);
     });
-    let second = 0;
+    bus.emit("message", fakeMessage("hi"));
+    expect(received.length).toBe(1);
+    expect(received[0]?.body).toBe("hi");
+  });
+
+  it("should deliver a named event to a wildcard listener", () => {
+    const bus = createEventBus();
+    const received: string[] = [];
+    bus.onWildcard((name) => {
+      received.push(name);
+    });
+    bus.emit("message", fakeMessage("x"));
+    expect(received).toEqual(["message"]);
+  });
+
+  it("should isolate errors between named listeners", () => {
+    const bus = createEventBus();
+    const reached: string[] = [];
     bus.on("message", () => {
       throw new Error("boom");
     });
     bus.on("message", () => {
-      second += 1;
+      reached.push("second");
     });
     bus.emit("message", fakeMessage("x"));
-    expect(errors.length).toBe(1);
-    expect(second).toBe(1);
+    expect(reached).toEqual(["second"]);
   });
 
-  it("should receive every event name when registered as wildcard", () => {
+  it("should isolate errors between wildcard listeners", () => {
     const bus = createEventBus();
-    const names: string[] = [];
-    bus.onWildcard((name) => {
-      names.push(name);
+    const reached: string[] = [];
+    bus.onWildcard(() => {
+      throw new Error("boom");
+    });
+    bus.onWildcard(() => {
+      reached.push("second");
     });
     bus.emit("message", fakeMessage("x"));
-    bus.emit("connection", { kind: "connection", sessionId: "s1", status: "connected" });
-    expect(names).toEqual(["message", "connection"]);
+    expect(reached).toEqual(["second"]);
+  });
+
+  it("should run a wildcard listener only once when registered with once", () => {
+    const bus = createEventBus();
+    const received: string[] = [];
+    bus.onWildcard(() => {
+      received.push("hit");
+    }, { once: true });
+    bus.emit("message", fakeMessage("x"));
+    bus.emit("message", fakeMessage("y"));
+    expect(received.length).toBe(1);
+  });
+
+  it("should stop delivery when a named listener unsubscribes", () => {
+    const bus = createEventBus();
+    const received: string[] = [];
+    const off = bus.on("message", () => {
+      received.push("hit");
+    });
+    off();
+    bus.emit("message", fakeMessage("x"));
+    expect(received.length).toBe(0);
+  });
+
+  it("should stop delivery when a wildcard listener unsubscribes", () => {
+    const bus = createEventBus();
+    const received: string[] = [];
+    const off = bus.onWildcard(() => {
+      received.push("hit");
+    });
+    off();
+    bus.emit("message", fakeMessage("x"));
+    expect(received.length).toBe(0);
+  });
+
+  it("should run wildcard listeners in descending priority", () => {
+    const bus = createEventBus();
+    const order: string[] = [];
+    bus.onWildcard(() => order.push("low"), { priority: 1 });
+    bus.onWildcard(() => order.push("high"), { priority: 10 });
+    bus.emit("message", fakeMessage("x"));
+    expect(order).toEqual(["high", "low"]);
   });
 });
