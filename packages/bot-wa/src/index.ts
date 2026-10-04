@@ -94,6 +94,7 @@ export type {
   ListenerOptions,
   PluginLoadedEvent,
   PluginRejectedEvent,
+  SandboxViolationEvent,
 } from "./domain/event/bus.js";
 
 export { createContext } from "./domain/context/builder.js";
@@ -127,6 +128,30 @@ export { compareSemver, parseSemver, satisfiesSemverRange } from "./domain/plugi
 export type { SemVer } from "./domain/plugin/semver.js";
 export { verifyPlugin } from "./domain/plugin/verifier.js";
 export type { PluginVerification, PluginVerificationDeps, VerificationFailureReason } from "./domain/plugin/verifier.js";
+export { loadPlugin } from "./domain/plugin/loader.js";
+export type { PluginLoaderDeps, SandboxOpenOptions } from "./domain/plugin/loader.js";
+export { createPluginRegistry, PluginRegistry } from "./domain/plugin/registry.js";
+export type { PluginHandle } from "./domain/plugin/registry.js";
+export { createSandboxPolicy, SANDBOX_APIS } from "./domain/plugin/sandbox/policy.js";
+export type { SandboxPolicy } from "./domain/plugin/sandbox/policy.js";
+export { createSandboxHost, SandboxHost } from "./domain/plugin/sandbox/host.js";
+export type { HostApiHandlers, SandboxHostDeps } from "./domain/plugin/sandbox/host.js";
+export { createMemoryChannelPair } from "./domain/plugin/sandbox/channel.js";
+export type { MemoryChannelPair, SandboxChannel } from "./domain/plugin/sandbox/channel.js";
+export { runWorkerRuntime } from "./domain/plugin/sandbox/worker-runtime.js";
+export type { WorkerRuntimeDeps } from "./domain/plugin/sandbox/worker-runtime.js";
+export type {
+  ApiCallFrame,
+  ApiResultFrame,
+  HandlerResultFrame,
+  InvokeHandlerFrame,
+  PluginApi,
+  PluginHandlerName,
+  PluginMessageView,
+  PluginModule,
+  SandboxApiName,
+  ViolationFrame,
+} from "./domain/plugin/sandbox/types.js";
 
 export { createAuthStateStore } from "./session/auth-state.js";
 export type { AuthStateStore } from "./session/auth-state.js";

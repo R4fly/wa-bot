@@ -20,6 +20,14 @@ export interface PluginLoadedEvent {
   readonly correlationId: string;
 }
 
+/** Event emitted when a sandboxed plugin violates policy or protocol. */
+export interface SandboxViolationEvent {
+  readonly kind: "sandbox:violation";
+  readonly name: string;
+  readonly reason: string;
+  readonly correlationId: string;
+}
+
 /** Payload map for all domain level events. */
 export interface DomainEvents {
   message: NormalizedMessageEvent;
@@ -27,6 +35,7 @@ export interface DomainEvents {
   auth: NormalizedAuthEvent;
   "plugin:rejected": PluginRejectedEvent;
   "plugin:loaded": PluginLoadedEvent;
+  "sandbox:violation": SandboxViolationEvent;
 }
 
 /** Names of typed domain events. */
