@@ -1,6 +1,6 @@
 {
   "name": "@baehaqirafly3/bot-wa",
-  "version": "0.2.0-next.1",
+  "version": "1.0.0-next.2",
   "description": "TypeScript library for building WhatsApp bots with Baileys and whatsapp-web.js",
   "type": "module",
   "main": "./dist/index.cjs",

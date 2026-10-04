@@ -1,5 +1,16 @@
 # example-ai-chatbot
 
+## 1.0.0-next.2
+
+### Major Changes
+
+- order types condition first in exports map
+
+### Patch Changes
+
+- Updated dependencies
+  - @baehaqirafly3/bot-wa@1.0.0-next.2
+
 ## 0.0.1-next.1
 
 ### Patch Changes

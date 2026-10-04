@@ -13,6 +13,7 @@
     "@baehaqirafly3/bot-wa-shared": "0.1.0"
   },
   "changesets": [
+    "bold-lions-serve",
     "domain-layer",
     "final-four",
     "four-phases",

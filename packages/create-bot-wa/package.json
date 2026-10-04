@@ -1,6 +1,6 @@
 {
   "name": "@baehaqirafly3/create-bot-wa",
-  "version": "0.2.0-next.1",
+  "version": "1.0.0-next.2",
   "description": "Project generator for @baehaqirafly3/bot-wa",
   "type": "module",
   "main": "./dist/index.cjs",

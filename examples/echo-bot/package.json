@@ -1,13 +1,13 @@
 {
   "name": "example-echo-bot",
   "private": true,
-  "version": "0.0.1-next.1",
+  "version": "1.0.0-next.2",
   "type": "module",
   "scripts": {
     "start": "node --experimental-strip-types src/index.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@baehaqirafly3/bot-wa": "0.2.0-next.1"
+    "@baehaqirafly3/bot-wa": "1.0.0-next.2"
   }
 }
