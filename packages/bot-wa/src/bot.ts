@@ -20,8 +20,7 @@ import { createLogger, type Logger } from "./infra/logger/index.js";
 import type { BoundedQueue } from "./infra/queue/contract.js";
 import { createMemoryQueue } from "./infra/queue/memory.js";
 import type { StorageAdapter } from "./infra/storage/contract.js";
-import { createFileStorage } from "./infra/storage/file.js";
-import { createMemoryStorage } from "./infra/storage/memory.js";
+import { createStorageAdapter } from "./infra/storage/factory.js";
 import { loadConfig, type ConfigSources } from "./kernel/config/loader.js";
 import type { BotConfig } from "./kernel/config/schema.js";
 import { createContainer } from "./kernel/container.js";
@@ -67,15 +66,10 @@ export interface Bot {
 }
 
 function openStorage(config: BotConfig): StorageAdapter {
-  if (config.session.storage === "memory") {
-    return createMemoryStorage();
-  }
-  if (config.session.storage === "file") {
-    return createFileStorage(config.session.storagePath);
-  }
-  throw new ConfigError({
-    message: `storage ${config.session.storage} requires a peer dependency that is not installed yet`,
-    context: { storage: config.session.storage },
+  return createStorageAdapter({
+    storage: config.session.storage,
+    storagePath: config.session.storagePath,
+    ...(config.redisUrl === undefined ? {} : { redisUrl: config.redisUrl }),
   });
 }
 

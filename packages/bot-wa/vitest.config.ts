@@ -1,13 +1,23 @@
-import { fileURLToPath } from "node:url";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
-  resolve: {
-    alias: [
-      {
-        find: /^@baehaqirafly3\/bot-wa-shared$/,
-        replacement: fileURLToPath(new URL("../shared/src/index.ts", import.meta.url)),
+  test: {
+    coverage: {
+      provider: "v8",
+      include: ["src/**/*.ts"],
+      exclude: ["src/**/*.test.ts", "src/domain/plugin/sandbox/worker-entry.ts"],
+      thresholds: {
+        lines: 70,
+        functions: 70,
+        branches: 70,
+        statements: 70,
+        "src/domain/**": {
+          lines: 85,
+          functions: 85,
+          branches: 85,
+          statements: 85,
+        },
       },
-    ],
+    },
   },
 });

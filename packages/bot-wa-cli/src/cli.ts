@@ -23,6 +23,7 @@ import {
 } from "@baehaqirafly3/bot-wa";
 import { scaffoldTemplate, TEMPLATE_NAMES, type TemplateName } from "./scaffold.js";
 
+
 /** Exit codes: 0 ok, 1 general, 2 bad arguments, 3 bad config, 4 runtime failure. */
 export const EXIT = { OK: 0, GENERAL: 1, BAD_ARGS: 2, BAD_CONFIG: 3, RUNTIME: 4 } as const;
 
@@ -42,15 +43,10 @@ export interface CliDeps {
 const VERSION = "0.1.0";
 
 function openStorageFor(config: BotConfig): StorageAdapter {
-  if (config.session.storage === "memory") {
-    return createMemoryStorage();
-  }
-  if (config.session.storage === "file") {
-    return createFileStorage(config.session.storagePath);
-  }
-  throw new ConfigError({
-    message: `storage ${config.session.storage} requires a peer dependency that is not installed yet`,
-    context: { storage: config.session.storage },
+  return createStorageAdapter({
+    storage: config.session.storage,
+    storagePath: config.session.storagePath,
+    ...(config.redisUrl === undefined ? {} : { redisUrl: config.redisUrl }),
   });
 }
 

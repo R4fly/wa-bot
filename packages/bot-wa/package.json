@@ -23,11 +23,28 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint src"
   },
   "dependencies": {
     "@baehaqirafly3/bot-wa-shared": "0.1.0"
+  },
+  "peerDependencies": {
+    "better-sqlite3": ">=9",
+    "ioredis": ">=5"
+  },
+  "peerDependenciesMeta": {
+    "better-sqlite3": {
+      "optional": true
+    },
+    "ioredis": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "better-sqlite3": "^11.3.0",
+    "ioredis": "^5.4.1"
   },
   "publishConfig": {
     "access": "public",
