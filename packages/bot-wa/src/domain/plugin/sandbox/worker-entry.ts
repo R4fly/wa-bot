@@ -27,7 +27,7 @@ async function main(): Promise<void> {
     onLine(handler: (line: string) => void): void {
       process.stdin.setEncoding("utf8");
       process.stdin.on("data", (chunk) => {
-        const text = chunk as string;
+        const text = String(chunk);
         for (const line of text.split("\n")) {
           if (line.length > 0) {
             handler(line);

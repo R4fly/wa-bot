@@ -175,4 +175,54 @@ export { qrBase64, qrRaw } from "./session/qr.js";
 export { createSessionManager, SessionManager } from "./session/manager.js";
 export type { SessionInfo, SessionManagerDeps, SessionStatus } from "./session/manager.js";
 
+export { interpolate } from "./domain/i18n/interpolate.js";
+export { createCatalog, translate } from "./domain/i18n/catalog.js";
+export type { Catalog } from "./domain/i18n/catalog.js";
+export { resolveLocale, selectPlural } from "./domain/i18n/resolver.js";
+export type { ResolveLocaleInput } from "./domain/i18n/resolver.js";
+
+export { loggerMiddleware } from "./domain/middleware/builtin/logger.js";
+export type { LoggerMiddlewareOptions } from "./domain/middleware/builtin/logger.js";
+export { i18nMiddleware } from "./domain/middleware/builtin/i18n.js";
+export type { I18nMiddlewareOptions } from "./domain/middleware/builtin/i18n.js";
+export { authMiddleware, permissionRank } from "./domain/middleware/builtin/auth.js";
+export type { PermissionMiddlewareOptions } from "./domain/middleware/builtin/auth.js";
+export { rateLimitMiddleware } from "./domain/middleware/builtin/rate-limit.js";
+export type { RateLimitMiddlewareOptions } from "./domain/middleware/builtin/rate-limit.js";
+export { antiSpamMiddleware } from "./domain/middleware/builtin/anti-spam.js";
+export type { AntiSpamMiddlewareOptions } from "./domain/middleware/builtin/anti-spam.js";
+export { antiLinkMiddleware } from "./domain/middleware/builtin/anti-link.js";
+export type { AntiLinkMiddlewareOptions } from "./domain/middleware/builtin/anti-link.js";
+export { antiToxicMiddleware } from "./domain/middleware/builtin/anti-toxic.js";
+export type { AntiToxicMiddlewareOptions } from "./domain/middleware/builtin/anti-toxic.js";
+export { onlyGroupMiddleware } from "./domain/middleware/builtin/only-group.js";
+export type { ScopeGuardOptions } from "./domain/middleware/builtin/only-group.js";
+export { onlyDmMiddleware } from "./domain/middleware/builtin/only-dm.js";
+export { onlyAdminMiddleware } from "./domain/middleware/builtin/only-admin.js";
+export { onlyOwnerMiddleware } from "./domain/middleware/builtin/only-owner.js";
+
+export { createMessageView } from "./domain/message/normalizer.js";
+export type { MessageView } from "./domain/message/normalizer.js";
+export { checkMedia, detectMediaType } from "./domain/message/media.js";
+export type { MediaDecision, MediaMeta, MediaPolicy, MediaType } from "./domain/message/media.js";
+
+export { requestPairingCode } from "./session/pairing.js";
+export { createHealthMonitor } from "./session/health.js";
+export type { HealthMonitor, HealthMonitorDeps } from "./session/health.js";
+export { backupSession, migrateSession, restoreSession } from "./session/backup.js";
+export type { MigrationResult, SessionSnapshot } from "./session/backup.js";
+
+export { cronMatches, parseCron } from "./domain/scheduler/cron.js";
+export type { CronFields } from "./domain/scheduler/cron.js";
+export { createScheduler, Scheduler } from "./domain/scheduler/scheduler.js";
+export type { SchedulerDeps, SchedulerJobKind, SchedulerJobSpec } from "./domain/scheduler/scheduler.js";
+
+export { createMemoryMetrics, createNoopMetrics } from "./observability/metrics.js";
+export type { MetricPoint, MetricsSink } from "./observability/metrics.js";
+export { createMemoryTracer, createNoopTracer } from "./observability/tracer.js";
+export type { FinishedSpan, Span, TraceSink } from "./observability/tracer.js";
+
+export { createBot } from "./bot.js";
+export type { Bot, BotCommandOptions, BotOverrides, CommandHooks } from "./bot.js";
+
 export type { AuditEntry, AuditSink, Clock } from "./types/internal.js";
