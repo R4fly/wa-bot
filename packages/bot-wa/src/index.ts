@@ -68,9 +68,16 @@ export type {
   NormalizedMessageEvent,
 } from "./adapters/contract.js";
 
+export { createEngineAdapter } from "./adapters/registry.js";
+export type { EngineAdapterOptions } from "./adapters/registry.js";
+
 export { createBaileysAdapter } from "./adapters/baileys/adapter.js";
 export type { BaileysAdapterOptions } from "./adapters/baileys/adapter.js";
 export type { BaileysSocketFactory, BaileysSocketLike } from "./adapters/baileys/types.js";
+
+export { createWWebJsAdapter } from "./adapters/wwebjs/adapter.js";
+export type { WWebJsAdapterOptions } from "./adapters/wwebjs/adapter.js";
+export type { WWebJsClientFactory, WWebJsClientLike, WWebJsMessageRef } from "./adapters/wwebjs/types.js";
 
 export { createEventBus, TypedEventBus } from "./domain/event/bus.js";
 export type { DomainEventName, DomainEvents, EventBusOptions, ListenerOptions } from "./domain/event/bus.js";
