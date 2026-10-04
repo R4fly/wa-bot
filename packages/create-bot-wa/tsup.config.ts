@@ -1,12 +1,9 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  entry: {
-    index: "src/index.ts",
-    scaffold: "src/scaffold.ts",
-  },
+  entry: ["src/index.ts"],
   format: ["esm", "cjs"],
-  dts: true,
+  dts: false,
   sourcemap: false,
   clean: true,
   minify: true,

@@ -1,6 +1,14 @@
 import { describe, expect, it } from "vitest";
-import type { MessageContext, Middleware, NextFn } from "@baehaqirafly3/bot-wa";
-import { createMockSocket, createTestContext, runMiddlewareChain, snapshotCtx } from "./index.js";
+import { createCommandRegistry, type Middleware } from "@baehaqirafly3/bot-wa";
+import {
+  createFakeGroup,
+  createMockSocket,
+  createTestContext,
+  dispatchCommand,
+  expectCommandCalled,
+  runMiddlewareChain,
+  snapshotCtx,
+} from "./index.js";
 
 describe("bot-wa-testing helpers", () => {
   it("should record replies when the context reply method is called", async () => {
@@ -15,7 +23,7 @@ describe("bot-wa-testing helpers", () => {
     const first: Middleware = {
       name: "first",
       priority: 1,
-      run: async (_inner: MessageContext, next: NextFn): Promise<void> => {
+      run: async (_inner, next) => {
         order.push("first");
         await next();
       },
@@ -23,7 +31,7 @@ describe("bot-wa-testing helpers", () => {
     const second: Middleware = {
       name: "second",
       priority: 2,
-      run: async (_inner: MessageContext, next: NextFn): Promise<void> => {
+      run: async (_inner, next) => {
         order.push("second");
         await next();
       },
@@ -45,5 +53,38 @@ describe("bot-wa-testing helpers", () => {
     const snapshot = snapshotCtx(ctx);
     expect(snapshot.correlationId).toBe("test-correlation");
     expect(snapshot.stopped).toBe(false);
+  });
+
+  it("should provide group fields when a fake group is created", () => {
+    const group = createFakeGroup({ subject: "ops" });
+    expect(group.chatJid).toBe("group@g.us");
+    expect(group.subject).toBe("ops");
+    expect(group.participants.length).toBe(1);
+  });
+
+  it("should stamp the command name when dispatchCommand runs a match", async () => {
+    const registry = createCommandRegistry();
+    registry.register(
+      { name: "ping", description: "pong", permission: "user", cooldownMs: 0 },
+      async (ctx) => {
+        await ctx.reply("pong");
+      },
+    );
+    const { ctx, sent } = createTestContext({ body: ".ping" });
+    const matched = await dispatchCommand(registry, ctx);
+    expect(matched).toBe(true);
+    expectCommandCalled(ctx, "ping");
+    expect(sent).toEqual(["pong"]);
+  });
+
+  it("should throw when expectCommandCalled sees a different command", async () => {
+    const registry = createCommandRegistry();
+    registry.register(
+      { name: "ping", description: "pong", permission: "user", cooldownMs: 0 },
+      async () => undefined,
+    );
+    const { ctx } = createTestContext({ body: ".ping" });
+    await dispatchCommand(registry, ctx);
+    expect(() => expectCommandCalled(ctx, "other")).toThrow();
   });
 });

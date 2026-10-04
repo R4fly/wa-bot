@@ -1,8 +1,11 @@
 import {
   createContext,
+  matchCommand,
+  parseArgs,
   redact,
   runPipeline,
   type CapabilityFlags,
+  type CommandRegistry,
   type EngineAdapter,
   type MessageContext,
   type Middleware,
@@ -17,6 +20,13 @@ export interface FakeMessageOverrides {
   readonly isGroup?: boolean;
 }
 
+/** A fake group fixture for group scoped tests. */
+export interface FakeGroup {
+  readonly chatJid: string;
+  readonly subject: string;
+  readonly participants: readonly string[];
+}
+
 /** Creates a deterministic fake inbound message with no network access. */
 export function createFakeMessage(overrides: FakeMessageOverrides = {}): NormalizedMessageEvent {
   return {
@@ -28,6 +38,15 @@ export function createFakeMessage(overrides: FakeMessageOverrides = {}): Normali
     body: overrides.body ?? "",
     timestamp: 0,
     isGroup: overrides.isGroup ?? false,
+  };
+}
+
+/** Creates a deterministic fake group fixture. */
+export function createFakeGroup(partial: Partial<FakeGroup> = {}): FakeGroup {
+  return {
+    chatJid: partial.chatJid ?? "group@g.us",
+    subject: partial.subject ?? "test group",
+    participants: partial.participants ?? ["sender@example"],
   };
 }
 
@@ -61,6 +80,36 @@ export async function runMiddlewareChain(
       throw error;
     },
   });
+}
+
+/**
+ * Matches the ctx body against a registry, stamps the matched command name on
+ * ctx state, and runs its handler. Returns false when nothing matched.
+ */
+export async function dispatchCommand(
+  registry: CommandRegistry,
+  ctx: MessageContext,
+  prefixes: readonly string[] = ["."],
+): Promise<boolean> {
+  const match = matchCommand(ctx.message.body, prefixes, registry.names(), registry.aliases());
+  if (match === null) {
+    return false;
+  }
+  const registered = registry.get(match.name);
+  if (registered === undefined) {
+    return false;
+  }
+  ctx.state["lastCommand"] = match.name;
+  await registered.handler(ctx, parseArgs(match.argsRaw));
+  return true;
+}
+
+/** Asserts that dispatchCommand stamped the expected command name on ctx state. */
+export function expectCommandCalled(ctx: MessageContext, name: string): void {
+  const actual = ctx.state["lastCommand"];
+  if (actual !== name) {
+    throw new Error(`expected command ${name} to be called, got ${String(actual)}`);
+  }
 }
 
 /** Redacted, serializable snapshot of a context for snapshot testing. */

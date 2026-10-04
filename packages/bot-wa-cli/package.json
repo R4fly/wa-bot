@@ -7,6 +7,18 @@
   "bin": {
     "bot-wa": "./dist/index.js"
   },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./scaffold": {
+      "types": "./dist/scaffold.d.ts",
+      "import": "./dist/scaffold.js",
+      "require": "./dist/scaffold.cjs"
+    }
+  },
   "files": ["dist", "README.md", "LICENSE"],
   "sideEffects": false,
   "engines": {
@@ -20,7 +32,11 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@baehaqirafly3/bot-wa": "0.1.0"
+    "@baehaqirafly3/bot-wa": "0.1.0",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "@types/qrcode": "^1.5.5"
   },
   "publishConfig": {
     "access": "public",
