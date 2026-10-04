@@ -52,6 +52,10 @@ export type { Logger, LoggerOptions, LogLevel, LogRecord, LogSink } from "./infr
 
 export { redact } from "./infra/logger/redactor.js";
 
+export { createMemoryStorage } from "./infra/storage/memory.js";
+export { createFileStorage } from "./infra/storage/file.js";
+export type { StorageAdapter, StorageSetOptions } from "./infra/storage/contract.js";
+
 export { assertCapability } from "./adapters/capability.js";
 export type {
   CapabilityFlags,
@@ -63,6 +67,10 @@ export type {
   NormalizedEvent,
   NormalizedMessageEvent,
 } from "./adapters/contract.js";
+
+export { createBaileysAdapter } from "./adapters/baileys/adapter.js";
+export type { BaileysAdapterOptions } from "./adapters/baileys/adapter.js";
+export type { BaileysSocketFactory, BaileysSocketLike } from "./adapters/baileys/types.js";
 
 export { createEventBus, TypedEventBus } from "./domain/event/bus.js";
 export type { DomainEventName, DomainEvents, EventBusOptions, ListenerOptions } from "./domain/event/bus.js";
@@ -91,5 +99,13 @@ export { generateHelp } from "./domain/command/help.js";
 export { runPipeline } from "./domain/middleware/pipeline.js";
 export type { PipelineOptions } from "./domain/middleware/pipeline.js";
 export type { Middleware, NextFn } from "./domain/middleware/types.js";
+
+export { createAuthStateStore } from "./session/auth-state.js";
+export type { AuthStateStore } from "./session/auth-state.js";
+export { createBackoff } from "./session/backoff.js";
+export type { Backoff, BackoffOptions } from "./session/backoff.js";
+export { qrBase64, qrRaw } from "./session/qr.js";
+export { createSessionManager, SessionManager } from "./session/manager.js";
+export type { SessionInfo, SessionManagerDeps, SessionStatus } from "./session/manager.js";
 
 export type { AuditEntry, AuditSink, Clock } from "./types/internal.js";
