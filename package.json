@@ -10,6 +10,7 @@
     "node": ">=20"
   },
   "scripts": {
+    "gate": "npm run lint --workspaces --if-present && npm run typecheck --workspaces --if-present && npm run test --workspaces --if-present && npm run build --workspaces --if-present && npm audit --audit-level=high --omit=dev",
     "build": "npm run build --workspaces --if-present",
     "dev": "npm run dev --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
@@ -19,7 +20,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.8",
-    "@types/node": "^26.6.4",
+    "@types/node": "^22.7.4",
     "eslint": "^9.10.0",
     "eslint-plugin-import": "^2.30.0",
     "prettier": "^3.3.3",
