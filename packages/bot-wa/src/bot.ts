@@ -19,8 +19,8 @@ import type { Middleware } from "./domain/middleware/types.js";
 import { createLogger, type Logger } from "./infra/logger/index.js";
 import type { BoundedQueue } from "./infra/queue/contract.js";
 import { createMemoryQueue } from "./infra/queue/memory.js";
-import type { StorageAdapter } from "./infra/storage/contract.js";
 import { createStorageAdapter } from "./infra/storage/factory.js";
+import type { StorageAdapter } from "./infra/storage/contract.js";
 import { loadConfig, type ConfigSources } from "./kernel/config/loader.js";
 import type { BotConfig } from "./kernel/config/schema.js";
 import { createContainer } from "./kernel/container.js";
@@ -65,20 +65,35 @@ export interface Bot {
   readonly commands: CommandRegistry;
 }
 
-function openStorage(config: BotConfig): StorageAdapter {
-  return createStorageAdapter({
-    storage: config.session.storage,
-    storagePath: config.session.storagePath,
-    ...(config.redisUrl === undefined ? {} : { redisUrl: config.redisUrl }),
-  });
-}
-
 /** Narrows a config value loaded inside a closure. Keeps flow analysis honest. */
 function requireConfig(value: BotConfig | null): BotConfig {
   if (value === null) {
     throw new ConfigError({ message: "config load produced no value", context: {} });
   }
   return value;
+}
+
+/**
+ * Reads the optional redis URL from config when the field exists on the
+ * validated schema, or from the BOTWA_REDIS_URL environment variable as a
+ * fallback for hosts that pass it at runtime.
+ */
+function readRedisUrl(config: BotConfig): string | undefined {
+  const record = config as BotConfig & { redisUrl?: string };
+  if (typeof record.redisUrl === "string" && record.redisUrl.length > 0) {
+    return record.redisUrl;
+  }
+  const envValue = process.env.BOTWA_REDIS_URL;
+  return typeof envValue === "string" && envValue.length > 0 ? envValue : undefined;
+}
+
+function openStorage(config: BotConfig): StorageAdapter {
+  const redisUrl = readRedisUrl(config);
+  return createStorageAdapter({
+    storage: config.session.storage,
+    storagePath: config.session.storagePath,
+    ...(redisUrl === undefined ? {} : { redisUrl }),
+  });
 }
 
 /** Creates a bot facade. Nothing connects until start is called. */

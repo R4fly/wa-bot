@@ -1,12 +1,12 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import QRCode from "qrcode";
 import {
   backupSession,
   ConfigError,
   createBot,
   createEngineAdapter,
-  createFileStorage,
-  createMemoryStorage,
+  createStorageAdapter,
   createTrustStore,
   generateSigningKeypair,
   loadConfig,
@@ -22,7 +22,6 @@ import {
   type StorageAdapter,
 } from "@baehaqirafly3/bot-wa";
 import { scaffoldTemplate, TEMPLATE_NAMES, type TemplateName } from "./scaffold.js";
-
 
 /** Exit codes: 0 ok, 1 general, 2 bad arguments, 3 bad config, 4 runtime failure. */
 export const EXIT = { OK: 0, GENERAL: 1, BAD_ARGS: 2, BAD_CONFIG: 3, RUNTIME: 4 } as const;
@@ -42,11 +41,21 @@ export interface CliDeps {
 
 const VERSION = "0.1.0";
 
+function readRedisUrl(config: BotConfig): string | undefined {
+  const record = config as BotConfig & { redisUrl?: string };
+  if (typeof record.redisUrl === "string" && record.redisUrl.length > 0) {
+    return record.redisUrl;
+  }
+  const envValue = process.env.BOTWA_REDIS_URL;
+  return typeof envValue === "string" && envValue.length > 0 ? envValue : undefined;
+}
+
 function openStorageFor(config: BotConfig): StorageAdapter {
+  const redisUrl = readRedisUrl(config);
   return createStorageAdapter({
     storage: config.session.storage,
     storagePath: config.session.storagePath,
-    ...(config.redisUrl === undefined ? {} : { redisUrl: config.redisUrl }),
+    ...(redisUrl === undefined ? {} : { redisUrl }),
   });
 }
 
@@ -151,10 +160,14 @@ export async function run(argv: readonly string[], deps: CliDeps): Promise<numbe
       }
       await adapter.disconnect();
       if (state.qr === null) {
-        deps.io.stderr("no QR received within timeout; terminal rendering arrives with the QR encoder decision");
+        deps.io.stderr("no QR received within timeout");
         return EXIT.RUNTIME;
       }
       const qrValue = state.qr;
+      if (!json) {
+        const terminal = await QRCode.toString(qrValue, { type: "terminal", small: true });
+        deps.io.stdout(terminal.trimEnd());
+      }
       emit({ raw: qrRaw(qrValue), base64: qrBase64(qrValue) });
       return EXIT.OK;
     }
@@ -269,16 +282,12 @@ export async function run(argv: readonly string[], deps: CliDeps): Promise<numbe
       const toName = String(parsed.flags["to"] ?? "");
       const dryRun = parsed.flags["dry-run"] === true;
       const sessionName = String(parsed.flags["session"] ?? config.session.name);
+      const redisUrl = readRedisUrl(config);
       const build = (name: string): StorageAdapter => {
-        if (name === "memory") {
-          return createMemoryStorage();
-        }
-        if (name === "file") {
-          return createFileStorage(config.session.storagePath);
-        }
-        throw new ConfigError({
-          message: `storage ${name} requires a peer dependency that is not installed yet`,
-          context: { storage: name },
+        return createStorageAdapter({
+          storage: name as BotConfig["session"]["storage"],
+          storagePath: config.session.storagePath,
+          ...(redisUrl === undefined ? {} : { redisUrl }),
         });
       };
       const result = await migrateSession(build(fromName), build(toName), sessionName, dryRun);

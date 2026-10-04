@@ -59,6 +59,9 @@ export { createMemoryStorage } from "./infra/storage/memory.js";
 export { createFileStorage } from "./infra/storage/file.js";
 export type { StorageAdapter, StorageSetOptions } from "./infra/storage/contract.js";
 
+export { createStorageAdapter } from "./infra/storage/factory.js";
+export type { StorageFactoryOptions } from "./infra/storage/factory.js";
+
 export { createTokenBucket, TokenBucket } from "./infra/ratelimit/token-bucket.js";
 export type { ConsumeResult, TokenBucketOptions } from "./infra/ratelimit/token-bucket.js";
 export { createSlidingWindowCounter, SlidingWindowCounter } from "./infra/ratelimit/sliding-window.js";
