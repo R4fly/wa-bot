@@ -4,11 +4,29 @@ import type {
   NormalizedMessageEvent,
 } from "../../adapters/contract.js";
 
-/** Payload map for all domain level events emitted in v0.3.0. */
+/** Event emitted when a plugin fails any verification check. */
+export interface PluginRejectedEvent {
+  readonly kind: "plugin:rejected";
+  readonly name: string;
+  readonly reason: string;
+  readonly correlationId: string;
+}
+
+/** Event emitted when a plugin passes verification and is loaded. */
+export interface PluginLoadedEvent {
+  readonly kind: "plugin:loaded";
+  readonly name: string;
+  readonly version: string;
+  readonly correlationId: string;
+}
+
+/** Payload map for all domain level events. */
 export interface DomainEvents {
   message: NormalizedMessageEvent;
   connection: NormalizedConnectionEvent;
   auth: NormalizedAuthEvent;
+  "plugin:rejected": PluginRejectedEvent;
+  "plugin:loaded": PluginLoadedEvent;
 }
 
 /** Names of typed domain events. */

@@ -56,6 +56,13 @@ export { createMemoryStorage } from "./infra/storage/memory.js";
 export { createFileStorage } from "./infra/storage/file.js";
 export type { StorageAdapter, StorageSetOptions } from "./infra/storage/contract.js";
 
+export { randomHex, randomId } from "./security/csprng.js";
+export { keyFingerprint, sha256Hex } from "./security/hash.js";
+export { generateSigningKeypair, signPayload, verifySignature } from "./security/sign.js";
+export type { SigningKeypair } from "./security/sign.js";
+export { createTrustStore } from "./security/trust-store.js";
+export type { TrustEntry, TrustStore } from "./security/trust-store.js";
+
 export { assertCapability } from "./adapters/capability.js";
 export type {
   CapabilityFlags,
@@ -80,7 +87,14 @@ export type { WWebJsAdapterOptions } from "./adapters/wwebjs/adapter.js";
 export type { WWebJsClientFactory, WWebJsClientLike, WWebJsMessageRef } from "./adapters/wwebjs/types.js";
 
 export { createEventBus, TypedEventBus } from "./domain/event/bus.js";
-export type { DomainEventName, DomainEvents, EventBusOptions, ListenerOptions } from "./domain/event/bus.js";
+export type {
+  DomainEventName,
+  DomainEvents,
+  EventBusOptions,
+  ListenerOptions,
+  PluginLoadedEvent,
+  PluginRejectedEvent,
+} from "./domain/event/bus.js";
 
 export { createContext } from "./domain/context/builder.js";
 export type { ContextDeps } from "./domain/context/builder.js";
@@ -106,6 +120,13 @@ export { generateHelp } from "./domain/command/help.js";
 export { runPipeline } from "./domain/middleware/pipeline.js";
 export type { PipelineOptions } from "./domain/middleware/pipeline.js";
 export type { Middleware, NextFn } from "./domain/middleware/types.js";
+
+export { PLUGIN_PERMISSIONS, validateManifest } from "./domain/plugin/manifest.js";
+export type { ManifestValidation, PluginManifest, PluginPermission } from "./domain/plugin/manifest.js";
+export { compareSemver, parseSemver, satisfiesSemverRange } from "./domain/plugin/semver.js";
+export type { SemVer } from "./domain/plugin/semver.js";
+export { verifyPlugin } from "./domain/plugin/verifier.js";
+export type { PluginVerification, PluginVerificationDeps, VerificationFailureReason } from "./domain/plugin/verifier.js";
 
 export { createAuthStateStore } from "./session/auth-state.js";
 export type { AuthStateStore } from "./session/auth-state.js";
