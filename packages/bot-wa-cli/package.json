@@ -1,32 +1,33 @@
 {
   "name": "@baehaqirafly3/bot-wa-cli",
   "version": "0.2.0-next.1",
-  "description": "Command line tool for bots built with @baehaqirafly3/bot-wa.",
-  "license": "MIT",
+  "description": "Command line companion for @baehaqirafly3/bot-wa",
   "type": "module",
-  "bin": {
-    "bot-wa": "./dist/index.js"
-  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
     },
     "./scaffold": {
-      "types": "./dist/scaffold.d.ts",
       "import": "./dist/scaffold.js",
-      "require": "./dist/scaffold.cjs"
+      "require": "./dist/scaffold.cjs",
+      "types": "./dist/scaffold.d.ts"
     }
+  },
+  "bin": {
+    "bot-wa": "./dist/index.js"
   },
   "files": [
     "dist",
     "README.md",
     "LICENSE"
   ],
-  "sideEffects": false,
-  "engines": {
-    "node": ">=20"
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "tsup",
@@ -36,14 +37,10 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@baehaqirafly3/bot-wa": "0.2.0-next.1",
+    "@baehaqirafly3/bot-wa": "workspace:*",
     "qrcode": "^1.5.4"
   },
   "devDependencies": {
     "@types/qrcode": "^1.5.5"
-  },
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
   }
 }

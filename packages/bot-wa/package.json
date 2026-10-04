@@ -1,27 +1,25 @@
 {
   "name": "@baehaqirafly3/bot-wa",
   "version": "0.2.0-next.1",
-  "description": "Headless TypeScript library for building WhatsApp bots over the Baileys and whatsapp-web.js engines.",
-  "license": "MIT",
+  "description": "TypeScript library for building WhatsApp bots with Baileys and whatsapp-web.js",
   "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    }
-  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "files": [
     "dist",
     "README.md",
     "LICENSE"
   ],
-  "sideEffects": false,
-  "engines": {
-    "node": ">=20"
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "build": "tsup",
@@ -32,26 +30,13 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@baehaqirafly3/bot-wa-shared": "0.1.0"
-  },
-  "peerDependencies": {
-    "better-sqlite3": ">=9",
-    "ioredis": ">=5"
-  },
-  "peerDependenciesMeta": {
-    "better-sqlite3": {
-      "optional": true
-    },
-    "ioredis": {
-      "optional": true
-    }
+    "@whiskeysockets/baileys": "^6.7.9",
+    "pino": "^9.5.0",
+    "qrcode": "^1.5.4",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
-    "better-sqlite3": "^11.3.0",
-    "ioredis": "^5.4.1"
-  },
-  "publishConfig": {
-    "access": "public",
-    "provenance": true
+    "@types/qrcode": "^1.5.5",
+    "@types/ws": "^8.5.13"
   }
 }
