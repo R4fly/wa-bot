@@ -8,8 +8,8 @@ describe("resolveWorkerEntryPath", () => {
     expect(path.length).toBeGreaterThan(0);
   });
 
-  it("should contain worker-entry in the path", () => {
+  it("should point at worker-entry.js beside the built bundle", () => {
     const path = resolveWorkerEntryPath();
-    expect(path).toContain("worker-entry");
+    expect(path.endsWith("worker-entry.js")).toBe(true);
   });
 });

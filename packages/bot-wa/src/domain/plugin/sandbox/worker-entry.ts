@@ -1,11 +1,13 @@
-import { runWorkerRuntime } from "./worker-runtime.js";
 import { SessionCipher } from "./protocol.js";
+import type { PluginModule } from "./types.js";
+import { runWorkerRuntime } from "./worker-runtime.js";
 import type { SandboxChannel } from "./channel.js";
 
 /**
- * Entry point for the sandbox worker process.
- * Reads the session key from BOTWA_SANDBOX_KEY environment variable,
- * sets up stdin/stdout as the channel, and runs the worker runtime.
+ * Entry point for the sandbox worker process, always run as ESM.
+ * Reads the session key from BOTWA_SANDBOX_KEY, wires stdin and stdout as
+ * the channel, and runs the worker runtime. Closing the channel drains
+ * stdout and ends the process without truncating pending writes.
  */
 async function main(): Promise<void> {
   const keyBase64 = process.env.BOTWA_SANDBOX_KEY;
@@ -37,7 +39,8 @@ async function main(): Promise<void> {
       process.stdin.on("close", handler);
     },
     close(): void {
-      process.exit(0);
+      process.exitCode = 0;
+      process.stdin.destroy();
     },
   };
 
@@ -46,9 +49,10 @@ async function main(): Promise<void> {
   await runWorkerRuntime({
     channel,
     cipher,
-    loadModule: async (specifier: string) => {
-      const module = await import(specifier);
-      return module.default ?? module;
+    loadModule: async (specifier: string): Promise<PluginModule> => {
+      const loaded = (await import(specifier)) as Record<string, unknown>;
+      const candidate = loaded["default"] ?? loaded;
+      return candidate as PluginModule;
     },
     entrySpecifier,
   });

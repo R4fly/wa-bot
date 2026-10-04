@@ -1,7 +1,10 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  entry: ["src/index.ts", "src/domain/plugin/sandbox/worker-entry.ts"],
+  entry: {
+    index: "src/index.ts",
+    "worker-entry": "src/domain/plugin/sandbox/worker-entry.ts",
+  },
   format: ["esm", "cjs"],
   dts: {
     entry: "src/index.ts",
@@ -9,6 +12,7 @@ export default defineConfig({
   sourcemap: true,
   clean: true,
   target: "node20",
+  shims: true,
   outExtension({ format }) {
     return { js: format === "cjs" ? ".cjs" : ".js" };
   },

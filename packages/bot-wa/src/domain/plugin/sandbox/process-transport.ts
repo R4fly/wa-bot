@@ -22,7 +22,7 @@ export interface ProcessTransportResult {
 /**
  * Spawns a sandbox worker as a separate Node.js process with memory limits
  * and optional permission model. Returns a channel connected to the worker's
- * stdin/stdout, plus a kill function for graceful shutdown.
+ * stdin and stdout, plus a kill function for graceful shutdown.
  */
 export function spawnSandboxWorker(deps: ProcessTransportDeps): ProcessTransportResult {
   const nodeExe = deps.nodeExecutable ?? process.execPath;
@@ -41,7 +41,7 @@ export function spawnSandboxWorker(deps: ProcessTransportDeps): ProcessTransport
   }
 
   const child = spawn(nodeExe, args, {
-    stdio: ["pipe", "pipe", "pipe", "ipc"],
+    stdio: ["pipe", "pipe", "pipe"],
     env: {
       ...process.env,
       BOTWA_SANDBOX_KEY: keyBase64,
@@ -51,6 +51,15 @@ export function spawnSandboxWorker(deps: ProcessTransportDeps): ProcessTransport
   let closed = false;
   const lineHandlers: Array<(line: string) => void> = [];
   const closeHandlers: Array<() => void> = [];
+
+  function markClosed(): void {
+    if (!closed) {
+      closed = true;
+      for (const handler of [...closeHandlers]) {
+        handler();
+      }
+    }
+  }
 
   child.stdout?.on("data", (chunk: Buffer) => {
     const text = chunk.toString("utf8");
@@ -67,23 +76,8 @@ export function spawnSandboxWorker(deps: ProcessTransportDeps): ProcessTransport
     process.stderr.write(`[sandbox-worker] ${chunk.toString("utf8")}`);
   });
 
-  child.on("close", () => {
-    if (!closed) {
-      closed = true;
-      for (const handler of [...closeHandlers]) {
-        handler();
-      }
-    }
-  });
-
-  child.on("error", () => {
-    if (!closed) {
-      closed = true;
-      for (const handler of [...closeHandlers]) {
-        handler();
-      }
-    }
-  });
+  child.on("close", markClosed);
+  child.on("error", markClosed);
 
   const channel: SandboxChannel = {
     get closed(): boolean {
@@ -122,13 +116,10 @@ export function spawnSandboxWorker(deps: ProcessTransportDeps): ProcessTransport
 }
 
 /**
- * Resolves the worker entry path for production builds.
- * In development, this points to the source file.
- * In production, this points to the compiled worker-entry.js in dist/.
+ * Resolves the worker entry path next to the built index bundle.
+ * Valid in built output where dist/index.js and dist/worker-entry.js sit
+ * side by side. Tests assert the suffix only, never spawn from source.
  */
 export function resolveWorkerEntryPath(): string {
-  if (process.env.NODE_ENV === "development") {
-    return fileURLToPath(new URL("./worker-entry.ts", import.meta.url));
-  }
   return fileURLToPath(new URL("./worker-entry.js", import.meta.url));
 }

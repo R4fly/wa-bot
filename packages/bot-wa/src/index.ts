@@ -52,9 +52,21 @@ export type { Logger, LoggerOptions, LogLevel, LogRecord, LogSink } from "./infr
 
 export { redact } from "./infra/logger/redactor.js";
 
+export { createAuditTrail } from "./infra/logger/audit.js";
+export type { AuditTrail, AuditTrailOptions } from "./infra/logger/audit.js";
+
 export { createMemoryStorage } from "./infra/storage/memory.js";
 export { createFileStorage } from "./infra/storage/file.js";
 export type { StorageAdapter, StorageSetOptions } from "./infra/storage/contract.js";
+
+export { createTokenBucket, TokenBucket } from "./infra/ratelimit/token-bucket.js";
+export type { ConsumeResult, TokenBucketOptions } from "./infra/ratelimit/token-bucket.js";
+export { createSlidingWindowCounter, SlidingWindowCounter } from "./infra/ratelimit/sliding-window.js";
+export type { SlidingWindowOptions, WindowDecision } from "./infra/ratelimit/sliding-window.js";
+
+export { createMemoryQueue } from "./infra/queue/memory.js";
+export type { MemoryQueueOptions } from "./infra/queue/memory.js";
+export type { BoundedQueue, EnqueueOptions, QueueJob } from "./infra/queue/contract.js";
 
 export { randomHex, randomId } from "./security/csprng.js";
 export { keyFingerprint, sha256Hex } from "./security/hash.js";
@@ -140,6 +152,8 @@ export { createMemoryChannelPair } from "./domain/plugin/sandbox/channel.js";
 export type { MemoryChannelPair, SandboxChannel } from "./domain/plugin/sandbox/channel.js";
 export { runWorkerRuntime } from "./domain/plugin/sandbox/worker-runtime.js";
 export type { WorkerRuntimeDeps } from "./domain/plugin/sandbox/worker-runtime.js";
+export { resolveWorkerEntryPath, spawnSandboxWorker } from "./domain/plugin/sandbox/process-transport.js";
+export type { ProcessTransportDeps, ProcessTransportResult } from "./domain/plugin/sandbox/process-transport.js";
 export type {
   ApiCallFrame,
   ApiResultFrame,
